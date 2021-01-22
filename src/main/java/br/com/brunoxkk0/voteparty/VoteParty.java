@@ -50,7 +50,7 @@ public class VoteParty extends JavaPlugin {
         voteHandler.setup();
 
         loggerHelper.info("Registering events...");
-        Bukkit.getPluginManager().registerEvents(this.voteHandler, this);
+        Bukkit.getPluginManager().registerEvents(voteHandler, this);
 
         loggerHelper.info("Loading BarHandlerThread...");
 
@@ -63,7 +63,7 @@ public class VoteParty extends JavaPlugin {
         loggerHelper.info("Shutting down systems and saving data.");
         voteHandler.save();
 
-        if (!this.barHandlerThread.getWarn().isInterrupted())
-            this.barHandlerThread.getWarn().interrupt();
+        if (!barHandlerThread.getWarn().isInterrupted())
+            barHandlerThread.getWarn().interrupt();
     }
 }

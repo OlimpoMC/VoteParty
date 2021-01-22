@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 
 public class BarHandlerThread {
+
     private static Thread warn;
     private static String barMessage;
     private static BarColor color;
@@ -31,6 +32,7 @@ public class BarHandlerThread {
 
         warn = new Thread(() -> {
             while (!warn.isInterrupted()) {
+
                 BossBar bar = Bukkit.createBossBar(barMessage.replace("%m", "" + VoteHandler.getMissingVotesCount()).replace("%c", "" + VoteHandler.getCurrentVoteCount()).replace("%r", "" + VoteHandler.getRequiredVotesCount()).replace("&", "§"), color, style, new org.bukkit.boss.BarFlag[0]);
 
 
