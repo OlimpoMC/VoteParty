@@ -16,6 +16,11 @@ repositories {
     }
 
     maven {
+        name = 'Sonatype OSS'
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+
+    maven {
         name = 'spigotmc'
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
 

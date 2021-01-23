@@ -2,21 +2,31 @@ package br.com.brunoxkk0.voteparty;
 
 import br.com.brunoxkk0.servercore.api.ConfigAPI;
 import br.com.brunoxkk0.servercore.api.LoggerHelper;
-import br.com.brunoxkk0.voteparty.core.BarHandlerThread;
-import br.com.brunoxkk0.voteparty.core.ConfigData;
+import br.com.brunoxkk0.voteparty.core.AnnounceSystem;
+import br.com.brunoxkk0.voteparty.core.data.ConfigData;
 import br.com.brunoxkk0.voteparty.core.VoteHandler;
+import br.com.brunoxkk0.voteparty.core.data.VoteData;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.bukkit.Bukkit;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 public class VoteParty extends JavaPlugin {
 
-    private static VoteParty instance;
-    private static ConfigAPI configAPI;
+    private final ScheduledExecutorService service = Executors.newScheduledThreadPool(5, new ThreadFactoryBuilder().setDaemon(true).build());
+
+    private static VoteParty    instance;
+    private static ConfigAPI    configAPI;
     private static LoggerHelper loggerHelper;
 
-    private BarHandlerThread barHandlerThread;
     private VoteHandler voteHandler;
+
+    public VoteHandler getVoteHandler() {
+        return voteHandler;
+    }
 
     public LoggerHelper getLoggerHelper() {
         return loggerHelper;
@@ -30,44 +40,33 @@ public class VoteParty extends JavaPlugin {
         return configAPI;
     }
 
-
-    public BarHandlerThread getBarHandlerThread() {
-        return this.barHandlerThread;
+    public ScheduledExecutorService getService() {
+        return service;
     }
-
-    public VoteHandler getVoteHandler() {
-        return this.voteHandler;
-    }
-
 
     public void onEnable() {
         instance = this;
 
-        loggerHelper = new LoggerHelper(this);
-
-        configAPI = new ConfigAPI(this, "config.yml", true, false);
+        loggerHelper    = new LoggerHelper(this);
+        configAPI       = new ConfigAPI(this, "config.yml", true, false);
 
         loggerHelper.info("Loading config data.");
         ConfigData.getInstance();
 
         voteHandler = new VoteHandler();
-        voteHandler.setup();
+        VoteHandler.load();
 
         loggerHelper.info("Registering events...");
         Bukkit.getPluginManager().registerEvents(voteHandler, this);
 
-        loggerHelper.info("Loading BarHandlerThread...");
+        loggerHelper.info("Starting announce system...");
+        AnnounceSystem.start();
 
-        barHandlerThread = new BarHandlerThread();
-        barHandlerThread.setup();
     }
 
 
     public void onDisable() {
         loggerHelper.info("Shutting down systems and saving data.");
-        voteHandler.save();
-
-        if (!barHandlerThread.getWarn().isInterrupted())
-            barHandlerThread.getWarn().interrupt();
+        VoteData.getInstance().save();
     }
 }

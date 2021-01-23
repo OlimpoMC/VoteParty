@@ -1,6 +1,7 @@
-package br.com.brunoxkk0.voteparty.core;
+package br.com.brunoxkk0.voteparty.core.data;
 
 import br.com.brunoxkk0.voteparty.VoteParty;
+import br.com.brunoxkk0.voteparty.core.CounterType;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
@@ -12,11 +13,11 @@ public class ConfigData {
         return (instance != null) ? instance : new ConfigData();
     }
 
-    private String       BossBarMessage;
-    private BarColor     BossBarColor;
-    private BarStyle     BossBarStyle;
-    private CounterType  BossBarCounterType;
-    private int          BossBarWarnTime;
+    private final String        BossBarMessage;
+    private final BarColor      BossBarColor;
+    private final BarStyle      BossBarStyle;
+    private final CounterType   BossBarCounterType;
+    private final int           BossBarWarnTime;
 
     private ConfigData(){
 
@@ -78,7 +79,4 @@ public class ConfigData {
         return BossBarMessage;
     }
 
-    public void setBossBarMessage(String bossBarMessage) {
-        BossBarMessage = bossBarMessage;
-    }
 }
