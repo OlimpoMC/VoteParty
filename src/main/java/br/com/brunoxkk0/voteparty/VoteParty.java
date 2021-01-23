@@ -3,6 +3,7 @@ package br.com.brunoxkk0.voteparty;
 import br.com.brunoxkk0.servercore.api.ConfigAPI;
 import br.com.brunoxkk0.servercore.api.LoggerHelper;
 import br.com.brunoxkk0.voteparty.core.BarHandlerThread;
+import br.com.brunoxkk0.voteparty.core.ConfigData;
 import br.com.brunoxkk0.voteparty.core.VoteHandler;
 import org.bukkit.Bukkit;
 
@@ -11,24 +12,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class VoteParty extends JavaPlugin {
 
     private static VoteParty instance;
+    private static ConfigAPI configAPI;
+    private static LoggerHelper loggerHelper;
 
-    private final ConfigAPI configAPI = new ConfigAPI(this, "config.yml", true, false);
-
-    private LoggerHelper loggerHelper;
     private BarHandlerThread barHandlerThread;
     private VoteHandler voteHandler;
 
     public LoggerHelper getLoggerHelper() {
-        return this.loggerHelper;
+        return loggerHelper;
     }
 
     public static VoteParty getInstance() {
         return instance;
     }
 
-    public ConfigAPI getConfigAPI() {
-        return this.configAPI;
+    public static ConfigAPI getConfigAPI() {
+        return configAPI;
     }
+
 
     public BarHandlerThread getBarHandlerThread() {
         return this.barHandlerThread;
@@ -44,7 +45,10 @@ public class VoteParty extends JavaPlugin {
 
         loggerHelper = new LoggerHelper(this);
 
-        loggerHelper.info("Loading VoteHandler...");
+        configAPI = new ConfigAPI(this, "config.yml", true, false);
+
+        loggerHelper.info("Loading config data.");
+        ConfigData.getInstance();
 
         voteHandler = new VoteHandler();
         voteHandler.setup();

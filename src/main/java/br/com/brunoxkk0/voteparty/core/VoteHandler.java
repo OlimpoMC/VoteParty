@@ -24,6 +24,7 @@ public class VoteHandler implements Listener {
 
 
     public void setup() {
+
         currentVoteCount = VoteParty.getInstance().getConfigAPI().getInt("votes_current");
         requiredVotesCount = VoteParty.getInstance().getConfigAPI().getInt("votes_required");
         rewardCommands = VoteParty.getInstance().getConfigAPI().getStringList("reward_commands");
